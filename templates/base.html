@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FOOD SERVICE - Yorqin, onlayn yetkazib berish ilovasi.">
+    <meta name="theme-color" content="#f8f9fa">
+    <title>FOOD SERVICE - Mazali Taomlar Yetkazish</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        mainbg: '#f8f9fa',
+                        white: '#ffffff',
+                        graytext: '#4b5563',
+                        darktext: '#1f2937',
+                        orange: '#ff7a00',
+                        lightorange: '#fff0e6',
+                        green: '#4CAF50'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Chart.js for Admin -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-mainbg text-darktext font-sans antialiased flex flex-col min-h-screen">
+    
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="{{ url_for('main.index') }}" class="flex items-center gap-2 group">
+                    <i class="ph-fill ph-cooking-pot text-orange text-3xl group-hover:scale-110 transition-transform"></i>
+                    <span class="font-serif text-2xl font-bold tracking-wider text-darktext">FOOD <span class="text-orange">SERVICE</span></span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="{{ url_for('main.index') }}" class="font-medium nav-link hover:text-orange transition-colors {{ 'text-orange' if request.endpoint == 'main.index' else 'text-graytext' }}">Bosh Sahifa</a>
+                    <a href="{{ url_for('menu.index') }}" class="font-medium nav-link hover:text-orange transition-colors {{ 'text-orange' if request.endpoint == 'menu.index' else 'text-graytext' }}">Taomnoma</a>
+                    <a href="{{ url_for('main.about') }}" class="font-medium nav-link hover:text-orange transition-colors {{ 'text-orange' if request.endpoint == 'main.about' else 'text-graytext' }}">Biz Haqimizda</a>
+                    <a href="{{ url_for('main.contact') }}" class="font-medium nav-link hover:text-orange transition-colors {{ 'text-orange' if request.endpoint == 'main.contact' else 'text-graytext' }}">Aloqa</a>
+                </div>
+
+                <!-- Auth / Cart -->
+                <div class="flex items-center gap-4">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_admin %}
+                            <a href="{{ url_for('admin.dashboard') }}" class="text-sm font-semibold text-white bg-darktext py-2 px-4 rounded hover:bg-orange transition">Admin panel</a>
+                        {% else %}
+                            <a href="{{ url_for('user.dashboard') }}" class="text-sm font-semibold text-darktext hover:text-orange transition"><i class="ph ph-user"></i> Kabinet</a>
+                        {% endif %}
+                        <a href="{{ url_for('auth.logout') }}" class="text-sm font-semibold text-red-500 hover:text-red-700 transition">Chiqish</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="text-sm font-semibold text-darktext hover:text-orange transition">Kirish</a>
+                    {% endif %}
+
+                    {% if not current_user.is_authenticated or not current_user.is_admin %}
+                    <a href="{{ url_for('orders.cart') }}" class="relative inline-flex items-center justify-center p-2 hover:bg-gray-100 rounded-full transition-colors group">
+                        <i class="ph ph-shopping-bag text-2xl text-darktext group-hover:text-orange transition-colors"></i>
+                        <span id="cart-count" class="absolute top-0 right-0 bg-orange text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center -translate-y-1 translate-x-1">0</span>
+                    </a>
+                    {% endif %}
+
+                    <button class="md:hidden ml-2 text-darktext focus:outline-none" id="mobile-menu-btn">
+                        <i class="ph ph-list text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:hidden hidden bg-white border-t border-gray-100 shadow-md" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="{{ url_for('main.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-darktext">Bosh Sahifa</a>
+                <a href="{{ url_for('menu.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-darktext">Taomnoma</a>
+                <a href="{{ url_for('main.about') }}" class="block px-3 py-2 rounded-md text-base font-medium text-darktext">Biz Haqimizda</a>
+                <a href="{{ url_for('main.contact') }}" class="block px-3 py-2 rounded-md text-base font-medium text-darktext">Aloqa</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="flex-grow pt-20">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-1">
+                    <a href="/" class="flex items-center gap-2 mb-4">
+                        <i class="ph-fill ph-cooking-pot text-orange text-3xl"></i>
+                        <span class="font-serif text-2xl font-bold tracking-wider text-darktext">FOOD <span class="text-orange">SERVICE</span></span>
+                    </a>
+                    <p class="text-graytext text-sm mb-4">Eng sifatli masalliqlardan tayyorlangan premium taomlar manzilingizgacha yetkazib beriladi.</p>
+                </div>
+
+                <!-- Footer content mostly same, removed dark classes -->
+                <div>
+                    <h3 class="text-lg font-bold text-darktext mb-4">Havolalar</h3>
+                    <ul class="space-y-2 text-sm text-graytext">
+                        <li><a href="{{ url_for('menu.index') }}" class="hover:text-orange">Taomnoma</a></li>
+                        <li><a href="{{ url_for('main.about') }}" class="hover:text-orange">Biz Haqimizda</a></li>
+                        <li><a href="{{ url_for('main.contact') }}" class="hover:text-orange">Aloqa</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-darktext mb-4">Bog'lanish</h3>
+                    <ul class="space-y-2 text-sm text-graytext">
+                        <li class="flex items-center gap-2"><i class="ph ph-phone text-orange"></i> +998 90 123 45 67</li>
+                        <li class="flex items-center gap-2"><i class="ph ph-envelope text-orange"></i> info@foodservice.uz</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 mt-12 pt-8 flex justify-between text-sm text-graytext">
+                <p>&copy; 2026 FOOD SERVICE V2.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast UI adjustments -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+    <script>
+        const flashMessages = [
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        { type: '{{ category }}', message: '{{ message }}' },
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        ];
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

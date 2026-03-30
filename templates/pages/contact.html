@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-20 min-h-[70vh] bg-mainbg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center mb-16 animate-slide-up">
+            <h1 class="text-4xl lg:text-5xl font-serif font-bold mb-4 text-darktext">Biz bilan <span class="text-orange">Bog'laning</span></h1>
+            <p class="text-graytext max-w-2xl mx-auto">Taklif, shikoyat yoki hamkorlik bo'yicha bizga murojaat qiling.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            
+            <div class="bg-white p-8 rounded-xl animate-slide-up shadow-sm border border-gray-100">
+                <form action="{{ url_for('main.contact') }}" method="POST" class="space-y-6">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    
+                    <div>
+                        <label class="block text-sm text-graytext mb-1">Ismingiz</label>
+                        <input type="text" name="name" required class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-3 text-darktext focus:outline-none focus:border-orange transition-colors">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-graytext mb-1">Email yoki Telefon</label>
+                        <input type="text" name="contact" required class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-3 text-darktext focus:outline-none focus:border-orange transition-colors">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-graytext mb-1">Xabar matni</label>
+                        <textarea name="message" required rows="5" class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-3 text-darktext focus:outline-none focus:border-orange transition-colors"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full btn-orange py-4 rounded-md font-bold text-lg shadow-md">
+                        Xabarni Yuborish <i class="ph-bold ph-paper-plane-tilt ml-2"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="space-y-8 animate-slide-up" style="animation-delay: 0.2s">
+                <div class="flex items-start gap-4">
+                    <div class="w-16 h-16 bg-lightorange border border-orange/20 rounded-full flex items-center justify-center shrink-0">
+                        <i class="ph-fill ph-map-pin text-3xl text-orange"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold font-serif mb-1 text-darktext">Manzil:</h4>
+                        <p class="text-graytext">Toshkent viloyati, Toshkent shahar<br>Yunusobod tumani, 10-kvartal, 1-uy</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div class="w-16 h-16 bg-lightorange border border-orange/20 rounded-full flex items-center justify-center shrink-0">
+                        <i class="ph-fill ph-phone text-3xl text-orange"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold font-serif mb-1 text-darktext">Telefon raqamalar:</h4>
+                        <p class="text-graytext">+998 (90) 123-45-67 (Buyurtmalar)</p>
+                        <p class="text-graytext">+998 (71) 000-00-00 (Ofis)</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div class="w-16 h-16 bg-lightorange border border-orange/20 rounded-full flex items-center justify-center shrink-0">
+                        <i class="ph-fill ph-envelope-simple text-3xl text-orange"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold font-serif mb-1 text-darktext">Email:</h4>
+                        <p class="text-graytext hover:text-orange cursor-pointer transition">info@foodservice.uz</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

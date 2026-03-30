@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-12 min-h-[70vh] bg-mainbg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl font-serif font-bold mb-8 animate-slide-up text-darktext">Sizning <span class="text-orange">Savatchangiz</span></h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            
+            <!-- Cart Items Component -->
+            <div class="lg:col-span-2 glass p-6 rounded-xl animate-slide-up h-fit bg-white" id="cart-items-container">
+                <!-- Javascript main.js will populate Cart here -->
+            </div>
+
+            <!-- Checkout Form & Summary -->
+            <div class="animate-slide-up" id="cart-summary" style="display: none; animation-delay: 0.1s">
+                <div class="glass p-6 rounded-xl sticky top-24 border border-gray-200 bg-white">
+                    <h3 class="text-2xl font-bold mb-4 font-serif text-darktext">Buyurtma Berish</h3>
+                    
+                    <div class="flex justify-between items-center mb-6 pb-6 border-b border-gray-100">
+                        <span class="text-graytext">Jami hisob:</span>
+                        <span class="text-3xl font-bold text-orange" id="cart-total-price">0 so'm</span>
+                    </div>
+
+                    <form action="{{ url_for('orders.checkout') }}" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <input type="hidden" name="cart_data" id="cart_data_input" value=""/>
+
+                        <div class="space-y-4">
+                            {% if current_user.is_authenticated %}
+                            <div>
+                                <label class="block text-sm text-graytext mb-1">Yetkazib berish manzili</label>
+                                <textarea name="address" required rows="3" class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-3 text-darktext focus:outline-none focus:border-orange transition-colors" placeholder="Kvartal, ko'cha nomi, uy raqami, mo'ljal..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full btn-orange py-4 rounded-md font-bold text-lg mt-6 flex justify-center items-center gap-2 group shadow-md">
+                                Buyurtmani Tasdiqlash <i class="ph-bold ph-check-circle group-hover:scale-110 transition-transform"></i>
+                            </button>
+                            {% else %}
+                            <div class="bg-lightorange border border-orange p-4 rounded-md text-center">
+                                <p class="text-darktext mb-3">Buyurtma berish uchun tizimga kirishingiz kerak.</p>
+                                <a href="{{ url_for('auth.login') }}" class="btn-orange inline-block px-6 py-2 rounded font-bold shadow-sm">Tizimga kirish</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </form>
+
+                    <div class="mt-4 flex items-center justify-center gap-2 text-sm text-graytext">
+                        <i class="ph-fill ph-lock-key text-green"></i> Ma'lumotlaringiz xavfsiz himoyalangan
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

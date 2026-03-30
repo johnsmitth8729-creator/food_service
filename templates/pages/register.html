@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-20 min-h-[70vh] flex justify-center items-center">
+    <div class="max-w-md w-full px-4 sm:px-0">
+        <div class="glass p-8 rounded-xl shadow-lg border border-gray-100">
+            <div class="text-center mb-8">
+                <i class="ph-fill ph-user-plus text-5xl text-orange mb-2 drop-shadow-sm"></i>
+                <h2 class="text-3xl font-serif font-bold text-darktext">Ro'yxatdan <span class="text-orange">O'tish</span></h2>
+                <p class="text-graytext mt-2 text-sm">Saytdan to'liq foydalanish imkoniyatlari</p>
+            </div>
+
+            <form action="{{ url_for('auth.register') }}" method="POST" class="space-y-6">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                
+                <div>
+                    <label class="block text-sm font-medium text-graytext mb-1">Foydalanuvchi nomi (Login)</label>
+                    <input type="text" name="username" required class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-3 text-darktext focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange transition-colors">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-graytext mb-1">Kiritiladigan parol</label>
+                    <input type="password" name="password" required minlength="6" class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-3 text-darktext focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-graytext mb-1">Parolni takrorlang</label>
+                    <input type="password" name="confirm_password" required minlength="6" class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-3 text-darktext focus:outline-none focus:border-orange focus:ring-1 focus:ring-orange transition-colors">
+                </div>
+                
+                <button type="submit" class="w-full btn-orange py-3 rounded-md font-bold text-lg mt-4 shadow-md">RO'YXATDAN O'TISH</button>
+            </form>
+
+            <div class="mt-8 text-center text-sm text-graytext border-t border-gray-100 pt-6">
+                Accountingiz bormi? <br>
+                <a href="{{ url_for('auth.login') }}" class="text-orange font-bold hover:underline mt-1 inline-block">Tizimga kirish</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

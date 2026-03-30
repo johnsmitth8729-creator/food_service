@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-mainbg py-20 lg:py-32 overflow-hidden flex items-center min-h-[80vh]">
+    <div class="absolute inset-0 z-0 opacity-20">
+        <img src="https://images.unsplash.com/photo-1544025162-835694c92c81?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Hero Background" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 animate-slide-up">
+        <div class="max-w-2xl">
+            <span class="text-orange tracking-widest text-sm font-bold uppercase mb-4 block inline-flex items-center gap-2">
+                <i class="ph-fill ph-star"></i> Premium Sifat
+            </span>
+            <h1 class="text-5xl lg:text-7xl font-serif font-bold text-darktext mb-6 leading-tight">
+                Eng Mazali Taomlar <br>
+                <span class="text-orange-gradient">Siz Uchun!</span>
+            </h1>
+            <p class="text-graytext text-lg mb-8 leading-relaxed">
+                Uy yoki ofis - farqi yo'q. Biz siz qidirgan haqiqiy ta'mni issiqqina holatda, eng qisqa vaqt ichida yetkazib beramiz. FOOD SERVICE bilan rohatlaning.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="{{ url_for('menu.index') }}" class="btn-orange px-8 py-4 rounded-md font-bold text-center flex items-center justify-center gap-2 group shadow-md">
+                    Taomnomani ko'rish <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                <a href="{{ url_for('main.about') }}" class="btn-outline px-8 py-4 rounded-md font-bold text-center bg-white shadow-sm hover:bg-orange hover:text-white">
+                    Biz haqimizda
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="py-20 bg-white border-y border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 animate-slide-up">
+            <h2 class="text-3xl md:text-5xl font-serif font-bold text-darktext mb-4">Mashhur <span class="text-orange">Taomlar</span></h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-orange to-yellow-400 mx-auto rounded-full"></div>
+            <p class="text-graytext mt-4 max-w-2xl mx-auto">Mijozlarimiz tomonidan eng ko'p buyurtma qilinadigan sara taomlar. Har biri o'ziga xos tarzda tayyorlangan.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {% for item in featured %}
+            <div class="glass rounded-xl overflow-hidden group hover:-translate-y-2 transition-all duration-300 flex flex-col h-full animate-slide-up">
+                <div class="h-48 relative overflow-hidden">
+                    <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                    <span class="absolute bottom-4 left-4 bg-orange text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-sm">{{ item.category }}</span>
+                </div>
+                <div class="p-6 flex flex-col flex-grow bg-white">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold font-serif text-darktext">{{ item.name }}</h3>
+                        <span class="text-orange font-bold whitespace-nowrap ml-2 bg-lightorange px-2 py-1 rounded">{{ "{:,.0f}".format(item.price).replace(',', ' ') }} s</span>
+                    </div>
+                    <p class="text-graytext text-sm mb-6 flex-grow">{{ item.description }}</p>
+                    <button class="w-full btn-outline py-3 rounded-md font-bold flex items-center justify-center gap-2 group-hover:bg-orange group-hover:text-white"
+                        onclick="Cart.add({{ item.id }}, '{{ item.name }}', {{ item.price }}, '{{ item.image }}')">
+                        <i class="ph-bold ph-shopping-cart"></i> Savatga qo'shish
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-12">
+            <a href="{{ url_for('menu.index') }}" class="inline-flex items-center gap-2 text-orange font-bold hover:text-darktext transition-colors">
+                Barcha taomlarni ko'rish <i class="ph-bold ph-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Advantages/Features Section -->
+<section class="py-20 bg-mainbg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            <div class="p-8 glass rounded-2xl animate-slide-up border border-gray-100 hover:shadow-xl transition-shadow duration-300 bg-white">
+                <div class="w-20 h-20 bg-lightorange rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="ph ph-clock text-4xl text-orange"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-darktext mb-4">Tezkor Yetkazish</h3>
+                <p class="text-graytext">Shaharning istalgan nuqtasiga issiq va xavfsiz holatda taomingizni olib boramiz.</p>
+            </div>
+            <div class="p-8 glass rounded-2xl animate-slide-up border border-gray-100 hover:shadow-xl transition-shadow duration-300 bg-white" style="animation-delay: 0.1s">
+                <div class="w-20 h-20 bg-lightorange rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="ph ph-star text-4xl text-orange"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-darktext mb-4">Oliy Navli Masalliq</h3>
+                <p class="text-graytext">Biz faqat kundalik yig'ilgan toza sabzavotlar va sertifikatlangan halol go'shtdan foydalanamiz.</p>
+            </div>
+            <div class="p-8 glass rounded-2xl animate-slide-up border border-gray-100 hover:shadow-xl transition-shadow duration-300 bg-white" style="animation-delay: 0.2s">
+                <div class="w-20 h-20 bg-lightorange rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="ph ph-shield-check text-4xl text-green"></i>
+                </div>
+                <h3 class="text-xl font-bold font-serif text-darktext mb-4">Gigiyenik Toza</h3>
+                <p class="text-graytext">Oshxonamiz va xodimlarimiz doimiy nazoratdan o'tadi, tozalik birinchi o'rinda.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

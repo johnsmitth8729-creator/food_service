@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-12 min-h-[70vh] bg-mainbg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <a href="{{ url_for('admin.dashboard') }}" class="text-sm font-bold text-graytext hover:text-orange mb-2 inline-block">&larr; Orqaga</a>
+                <h1 class="text-3xl font-serif font-bold text-darktext">Taomnoma <span class="text-orange">Boshqaruvi</span></h1>
+            </div>
+        </div>
+
+        <!-- Add Product Form -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
+            <h2 class="text-xl font-bold font-serif mb-4 text-darktext">+ Yangi Qo'shish</h2>
+            <form action="{{ url_for('admin.products') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                
+                <input type="text" name="name" required placeholder="Nomi..." class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-2 text-darktext focus:outline-none focus:border-orange">
+                <input type="number" name="price" required placeholder="Narxi (so'm)..." class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-2 text-darktext focus:outline-none focus:border-orange">
+                <input type="text" name="category" required placeholder="Turkum (Kategoriya)..." class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-2 text-darktext focus:outline-none focus:border-orange">
+                <input type="url" name="image" required placeholder="Rasm URL linki..." class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-2 text-darktext focus:outline-none focus:border-orange md:col-span-2 lg:col-span-1">
+                <textarea name="description" required placeholder="Ta'rif..." class="w-full bg-mainbg border border-gray-200 rounded-md px-4 py-2 text-darktext focus:outline-none focus:border-orange md:col-span-2 lg:col-span-2 rows-1"></textarea>
+                
+                <button type="submit" class="w-full lg:col-span-3 btn-orange py-3 rounded-md font-bold text-lg mt-2 shadow-sm">
+                    QO'SHISH
+                </button>
+            </form>
+        </div>
+
+        <!-- Product List -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-darktext font-bold">
+                            <th class="py-4 px-6">Rasm</th>
+                            <th class="py-4 px-6">Nomi</th>
+                            <th class="py-4 px-6">Turkum</th>
+                            <th class="py-4 px-6">Narxi</th>
+                            <th class="py-4 px-6">Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-graytext">
+                        {% for p in products %}
+                        <tr class="border-b border-gray-100 hover:bg-mainbg transition-colors">
+                            <td class="py-4 px-6"><img src="{{ p.image }}" class="w-12 h-12 rounded object-cover border border-gray-200"></td>
+                            <td class="py-4 px-6 font-bold text-darktext">{{ p.name }}</td>
+                            <td class="py-4 px-6">{{ p.category }}</td>
+                            <td class="py-4 px-6 text-orange font-bold">{{ "{:,.0f}".format(p.price).replace(',', ' ') }}</td>
+                            <td class="py-4 px-6">
+                                <form action="{{ url_for('admin.delete_product', prod_id=p.id) }}" method="POST" class="inline" onsubmit="return confirm('O\'chirilsinmi?')">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                    <button type="submit" class="text-red-500 hover:text-red-700 font-bold"><i class="ph-bold ph-trash"></i> O'chirish</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

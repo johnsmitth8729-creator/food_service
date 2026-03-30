@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-12 min-h-[70vh] bg-mainbg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Admin Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-serif font-bold text-darktext">Boshqaruv <span class="text-orange">Paneli</span></h1>
+                <p class="text-graytext">Tizimdagi umumiy statistika va sozlamalar</p>
+            </div>
+            
+            <div class="flex gap-4">
+                <a href="{{ url_for('admin.users') }}" class="btn-outline px-4 py-2 rounded font-bold shadow-sm bg-white">Mijozlar</a>
+                <a href="{{ url_for('admin.products') }}" class="btn-outline px-4 py-2 rounded font-bold shadow-sm bg-white">Taomnoma</a>
+                <a href="{{ url_for('admin.orders') }}" class="btn-outline px-4 py-2 rounded font-bold shadow-sm bg-white">Buyurtmalar</a>
+                <a href="{{ url_for('admin.contacts') }}" class="btn-outline px-4 py-2 rounded font-bold shadow-sm bg-white">Xabarlar</a>
+            </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-graytext mb-1">Jami Mijozlar</p>
+                    <p class="text-3xl font-bold font-serif text-darktext">{{ users_count }}</p>
+                </div>
+                <div class="w-12 h-12 bg-lightorange rounded-full flex items-center justify-center">
+                    <i class="ph-fill ph-users text-2xl text-orange"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-graytext mb-1">Buyurtmalar</p>
+                    <p class="text-3xl font-bold font-serif text-darktext">{{ orders_count }}</p>
+                </div>
+                <div class="w-12 h-12 bg-lightorange rounded-full flex items-center justify-center">
+                    <i class="ph-fill ph-shopping-bag text-2xl text-orange"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-graytext mb-1">Tushum (so'm)</p>
+                    <p class="text-2xl font-bold font-serif text-green">{{ "{:,.0f}".format(income).replace(',', ' ') }}</p>
+                </div>
+                <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center">
+                    <i class="ph-fill ph-wallet text-2xl text-green"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-graytext mb-1">Kutilmoqda</p>
+                    <p class="text-3xl font-bold font-serif text-darktext">{{ pending }}</p>
+                </div>
+                <div class="w-12 h-12 bg-yellow-50 rounded-full flex items-center justify-center">
+                    <i class="ph-fill ph-clock text-2xl text-yellow-500"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Split Layout (Chart & Recent Orders) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Chart Area -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="text-xl font-bold font-serif text-darktext mb-6">Statistic Ko'rsatkich</h3>
+                <canvas id="salesChart" class="w-full h-64"></canvas>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold font-serif text-darktext">So'nggi Buyurtmalar</h3>
+                    <a href="{{ url_for('admin.orders') }}" class="text-sm text-orange hover:underline font-bold">Barchasini ko'rish</a>
+                </div>
+                
+                <div class="space-y-4">
+                    {% for order in recent %}
+                    <div class="flex justify-between items-center p-4 border border-gray-100 rounded-lg bg-mainbg">
+                        <div>
+                            <p class="font-bold text-darktext">#{{ order.id }} - {{ order.user.username }}</p>
+                            <p class="text-sm text-graytext">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-orange">{{ "{:,.0f}".format(order.total_price).replace(',', ' ') }} s</p>
+                            <p class="text-xs font-bold px-2 py-1 rounded {{ 'bg-yellow-100 text-yellow-800' if order.status == 'Kutilmoqda' else 'bg-green-100 text-green-800' }}">{{ order.status }}</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-graytext text-center py-4">Buyurtmalar yo'q.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Chart JS Init -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Dush', 'Sesh', 'Chor', 'Pay', 'Juma', 'Shan', 'Yak'],
+            datasets: [{
+                label: 'Kunlik Buyurtmalar (Demo)',
+                data: [12, 19, 15, 25, 22, 30, 28],
+                backgroundColor: 'rgba(255, 122, 0, 0.7)',
+                borderColor: '#ff7a00',
+                borderWidth: 1,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+});
+</script>
+{% endblock %}

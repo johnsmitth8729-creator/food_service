@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-12 min-h-[70vh] bg-mainbg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <a href="{{ url_for('admin.dashboard') }}" class="text-sm font-bold text-graytext hover:text-orange mb-2 inline-block">&larr; Orqaga</a>
+                <h1 class="text-3xl font-serif font-bold text-darktext">Mijozlar <span class="text-orange">Ro'yxati</span></h1>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-darktext font-bold">
+                            <th class="py-4 px-6">ID</th>
+                            <th class="py-4 px-6">Login (Username)</th>
+                            <th class="py-4 px-6">Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-graytext">
+                        {% for u in users %}
+                        <tr class="border-b border-gray-100 hover:bg-mainbg transition-colors">
+                            <td class="py-4 px-6">#{{ u.id }}</td>
+                            <td class="py-4 px-6 font-bold text-darktext">{{ u.username }}</td>
+                            <td class="py-4 px-6">
+                                <form action="{{ url_for('admin.delete_user', user_id=u.id) }}" method="POST" class="inline" onsubmit="return confirm('Rostdan ham uchrishni xohlaysizmi?')">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                    <button type="submit" class="text-red-500 hover:text-red-700 font-bold"><i class="ph-bold ph-trash"></i> O'chirish</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
