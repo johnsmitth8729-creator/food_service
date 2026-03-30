@@ -3,16 +3,19 @@
 {% block content %}
 <section class="py-12 bg-mainbg min-h-[70vh]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         <!-- Header & Search -->
         <div class="flex flex-col md:flex-row justify-between items-center mb-12 animate-slide-up">
             <div>
-                <h1 class="text-4xl md:text-5xl font-serif font-bold text-darktext mb-2">Bizning <span class="text-orange">Taomnoma</span></h1>
+                <h1 class="text-4xl md:text-5xl font-serif font-bold text-darktext mb-2">Bizning <span
+                        class="text-orange">Taomnoma</span></h1>
                 <p class="text-graytext">O'zingizga yoqqan lazzatni tanlang</p>
             </div>
-            
-            <form method="GET" action="{{ url_for('menu.index') }}" class="mt-6 md:mt-0 relative w-full md:w-96 flex shadow-sm rounded-md overflow-hidden">
-                <input type="text" name="q" value="{{ search_query }}" placeholder="Taom qidirish..." class="w-full bg-white border border-gray-200 text-darktext px-4 py-3 focus:outline-none focus:border-orange transition-colors">
+
+            <form method="GET" action="{{ url_for('menu.index') }}"
+                class="mt-6 md:mt-0 relative w-full md:w-96 flex shadow-sm rounded-md overflow-hidden">
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Taom qidirish..."
+                    class="w-full bg-white border border-gray-200 text-darktext px-4 py-3 focus:outline-none focus:border-orange transition-colors">
                 <input type="hidden" name="category" value="{{ current_cat }}">
                 <button type="submit" class="bg-orange text-white px-5 py-3 hover:bg-orange transition-colors">
                     <i class="ph-bold ph-magnifying-glass"></i>
@@ -22,11 +25,13 @@
 
         <!-- Categories -->
         <div class="flex flex-wrap gap-4 mb-10 overflow-x-auto pb-4 hide-scroll-bar animate-slide-up">
-            <a href="{{ url_for('menu.index') }}" class="px-6 py-2 rounded-full border border-orange font-medium whitespace-nowrap transition-colors {{ 'bg-orange text-white' if not current_cat else 'text-orange bg-white hover:bg-orange hover:text-white shadow-sm' }}">
+            <a href="{{ url_for('menu.index') }}"
+                class="px-6 py-2 rounded-full border border-orange font-medium whitespace-nowrap transition-colors {{ 'bg-orange text-white' if not current_cat else 'text-orange bg-white hover:bg-orange hover:text-white shadow-sm' }}">
                 Barchasi
             </a>
             {% for cat in categories %}
-            <a href="{{ url_for('menu.index', category=cat) }}" class="px-6 py-2 rounded-full border border-orange font-medium whitespace-nowrap transition-colors {{ 'bg-orange text-white' if current_cat == cat else 'text-orange bg-white hover:bg-orange hover:text-white shadow-sm' }}">
+            <a href="{{ url_for('menu.index', category=cat) }}"
+                class="px-6 py-2 rounded-full border border-orange font-medium whitespace-nowrap transition-colors {{ 'bg-orange text-white' if current_cat == cat else 'text-orange bg-white hover:bg-orange hover:text-white shadow-sm' }}">
                 {{ cat }}
             </a>
             {% endfor %}
@@ -36,19 +41,25 @@
         {% if products %}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {% for item in products %}
-            <div class="glass rounded-xl overflow-hidden group hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full animate-slide-up bg-white">
+            <div
+                class="glass rounded-xl overflow-hidden group hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full animate-slide-up bg-white">
                 <div class="h-48 relative overflow-hidden">
-                    <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <img src="{{ item.image }}" alt="{{ item.name }}"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                    <span class="absolute bottom-4 left-4 bg-orange text-white shadow-sm text-xs font-bold px-3 py-1 rounded-full uppercase">{{ item.category }}</span>
+                    <span
+                        class="absolute bottom-4 left-4 bg-orange text-white shadow-sm text-xs font-bold px-3 py-1 rounded-full uppercase">{{
+                        item.category }}</span>
                 </div>
                 <div class="p-6 flex flex-col flex-grow">
                     <div class="flex justify-between items-start mb-2">
                         <h3 class="text-xl font-bold font-serif text-darktext">{{ item.name }}</h3>
                     </div>
-                    <p class="text-orange font-bold text-lg mb-2">{{ "{:,.0f}".format(item.price).replace(',', ' ') }} so'm</p>
+                    <p class="text-orange font-bold text-lg mb-2">{{ "{:,.0f}".format(item.price).replace(',', ' ') }}
+                        so'm</p>
                     <p class="text-graytext text-sm mb-6 flex-grow">{{ item.description }}</p>
-                    <button class="w-full btn-outline py-3 rounded-md font-bold flex items-center justify-center gap-2 group-hover:bg-orange group-hover:text-white"
+                    <button
+                        class="w-full btn-outline py-3 rounded-md font-bold flex items-center justify-center gap-2 group-hover:bg-orange group-hover:text-white"
                         onclick="Cart.add({{ item.id }}, '{{ item.name }}', {{ item.price }}, '{{ item.image }}')">
                         <i class="ph-bold ph-shopping-cart"></i> Savatga
                     </button>
@@ -61,20 +72,24 @@
             <i class="ph-fill ph-warning-circle text-6xl text-gray-400 mb-4"></i>
             <h3 class="text-2xl font-bold text-darktext mb-2">Taom topilmadi</h3>
             <p class="text-graytext mb-6">Qidiruv yoki toifa bo'yicha taom topilmadi. Boshqa so'z kiritib ko'ring.</p>
-            <a href="{{ url_for('menu.index') }}" class="btn-orange px-6 py-3 rounded-md font-bold inline-block">Barcha taomlarga qaytish</a>
+            <a href="{{ url_for('menu.index') }}" class="btn-orange px-6 py-3 rounded-md font-bold inline-block">Barcha
+                taomlarga qaytish</a>
         </div>
         {% endif %}
     </div>
 </section>
 
 <style>
-/* Hide scrollbar for Category tags */
-.hide-scroll-bar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-.hide-scroll-bar::-webkit-scrollbar {
-    display: none;
-}
+    /* Hide scrollbar for Category tags */
+    .hide-scroll-bar {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .hide-scroll-bar::-webkit-scrollbar {
+        display: none;
+    }
 </style>
 {% endblock %}

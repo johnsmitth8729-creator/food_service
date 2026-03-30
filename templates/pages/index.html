@@ -2,33 +2,61 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="relative bg-mainbg py-20 lg:py-32 overflow-hidden flex items-center min-h-[80vh]">
-    <div class="absolute inset-0 z-0 opacity-20">
-        <img src="https://images.unsplash.com/photo-1544025162-835694c92c81?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Hero Background" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+<section class="hero-section relative overflow-hidden flex items-center min-h-[90vh]">
+    <!-- Background Image with Overlay -->
+    <div class="absolute inset-0 z-0">
+        <img src="{{ url_for('static', filename='hero_food_bg.png') }}" alt="Premium Taomlar" class="w-full h-full object-cover">
+        <div class="absolute inset-0 hero-overlay"></div>
     </div>
+
+    <!-- Floating decorative elements -->
+    <div class="absolute top-20 right-10 w-32 h-32 bg-orange/10 rounded-full blur-3xl animate-pulse-slow z-0"></div>
+    <div class="absolute bottom-20 right-1/3 w-48 h-48 bg-orange/5 rounded-full blur-3xl z-0"></div>
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 animate-slide-up">
-        <div class="max-w-2xl">
-            <span class="text-orange tracking-widest text-sm font-bold uppercase mb-4 block inline-flex items-center gap-2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20 lg:py-32">
+        <div class="max-w-2xl animate-slide-up">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 bg-orange/20 border border-orange/40 text-orange px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest mb-6 backdrop-blur-sm">
                 <i class="ph-fill ph-star"></i> Premium Sifat
-            </span>
-            <h1 class="text-5xl lg:text-7xl font-serif font-bold text-darktext mb-6 leading-tight">
+            </div>
+
+            <h1 class="text-5xl lg:text-7xl font-serif font-bold text-white mb-6 leading-tight drop-shadow-lg">
                 Eng Mazali Taomlar <br>
                 <span class="text-orange-gradient">Siz Uchun!</span>
             </h1>
-            <p class="text-graytext text-lg mb-8 leading-relaxed">
+            <p class="text-white/85 text-lg mb-10 leading-relaxed max-w-xl drop-shadow">
                 Uy yoki ofis - farqi yo'q. Biz siz qidirgan haqiqiy ta'mni issiqqina holatda, eng qisqa vaqt ichida yetkazib beramiz. FOOD SERVICE bilan rohatlaning.
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
-                <a href="{{ url_for('menu.index') }}" class="btn-orange px-8 py-4 rounded-md font-bold text-center flex items-center justify-center gap-2 group shadow-md">
+                <a href="{{ url_for('menu.index') }}" class="btn-orange px-8 py-4 rounded-lg font-bold text-center flex items-center justify-center gap-2 group shadow-xl shadow-orange/30">
                     Taomnomani ko'rish <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
                 </a>
-                <a href="{{ url_for('main.about') }}" class="btn-outline px-8 py-4 rounded-md font-bold text-center bg-white shadow-sm hover:bg-orange hover:text-white">
+                <a href="{{ url_for('main.about') }}" class="hero-outline-btn px-8 py-4 rounded-lg font-bold text-center backdrop-blur-sm">
                     Biz haqimizda
                 </a>
             </div>
+
+            <!-- Stats row -->
+            <div class="flex flex-wrap gap-8 mt-12 pt-8 border-t border-white/20">
+                <div class="text-center">
+                    <p class="text-3xl font-bold text-orange">500+</p>
+                    <p class="text-white/70 text-sm mt-1">Mamnun mijozlar</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-3xl font-bold text-orange">50+</p>
+                    <p class="text-white/70 text-sm mt-1">Taom turlari</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-3xl font-bold text-orange">30 daq</p>
+                    <p class="text-white/70 text-sm mt-1">Tezkor yetkazish</p>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+        <i class="ph ph-caret-double-down text-white/50 text-2xl"></i>
     </div>
 </section>
 
