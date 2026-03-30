@@ -45,6 +45,11 @@ def create_app():
 
     return app
 
+
+# 🔥 MUHIM QATOR (SHUNI QO‘SH)
+app = create_app()
+
+
+# Local run uchun
 if __name__ == '__main__':
-    app = create_app()
     app.run(debug=True)
